@@ -30,3 +30,8 @@ def enregistrer_sortie():
         return jsonify({"message": "✅ Mouvement sauvegardé", "fichier": nom_fichier})
     except Exception as e:
         return jsonify({"erreur": str(e)}), 500
+
+# === AJOUT ESSENTIEL POUR RENDER ===
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
