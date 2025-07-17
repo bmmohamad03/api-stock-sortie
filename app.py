@@ -30,6 +30,15 @@ def enregistrer_sortie():
         return jsonify({"message": "✅ Mouvement sauvegardé", "fichier": nom_fichier})
     except Exception as e:
         return jsonify({"erreur": str(e)}), 500
+    
+    @app.route("/list_json", methods=["GET"])
+def lister_fichiers_json():
+    try:
+        fichiers = [f for f in os.listdir(DOSSIER_JSON) if f.endswith(".json")]
+        return jsonify(fichiers)
+    except Exception as e:
+        return jsonify({"erreur": str(e)}), 500
+
 
 # === AJOUT ESSENTIEL POUR RENDER ===
 if __name__ == "__main__":
