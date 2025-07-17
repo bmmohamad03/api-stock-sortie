@@ -48,6 +48,12 @@ def liste_fichiers_json():
     except Exception as e:
         return jsonify({"erreur": str(e)})
 
+from flask import send_from_directory
+
+@app.route("/fichiers/<nom_fichier>")
+def fichiers_json(nom_fichier):
+    chemin_dossier = os.path.join(os.getcwd(), "json_sorties")
+    return send_from_directory(chemin_dossier, nom_fichier)
 
 # === Lancer en local si besoin ===
 if __name__ == "__main__":
