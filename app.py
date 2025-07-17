@@ -34,11 +34,11 @@ def enregistrer_sortie():
     @app.route("/list_json", methods=["GET"])
 def lister_fichiers_json():
     try:
-        fichiers = [f for f in os.listdir(DOSSIER_JSON) if f.endswith(".json")]
-        return jsonify(fichiers)
+        fichiers = os.listdir("json_sorties")
+        fichiers_json = [f for f in fichiers if f.endswith(".json")]
+        return jsonify(fichiers_json)
     except Exception as e:
         return jsonify({"erreur": str(e)}), 500
-
 
 # === AJOUT ESSENTIEL POUR RENDER ===
 if __name__ == "__main__":
