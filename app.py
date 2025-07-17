@@ -38,14 +38,16 @@ def enregistrer_sortie():
 
 
 # ✅ === Nouvelle route pour lister les fichiers JSON ===
-@app.route("/list_json", methods=["GET"])
-def lister_fichiers_json():
+@app.route("/list_json")
+def liste_fichiers_json():
     try:
-        fichiers = os.listdir("json_sorties")
+        chemin_dossier = os.path.join(os.getcwd(), "json_sorties")
+        fichiers = os.listdir(chemin_dossier)
         fichiers_json = [f for f in fichiers if f.endswith(".json")]
         return jsonify(fichiers_json)
     except Exception as e:
-        return jsonify({"erreur": str(e)}), 500
+        return jsonify({"erreur": str(e)})
+
 
 # === Lancer en local si besoin ===
 if __name__ == "__main__":
