@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 import os
 import json
 
@@ -13,22 +13,19 @@ def enregistrer_sortie():
             return jsonify({"erreur": "Données JSON manquantes"}), 400
 
         # Récupération des champs
-        code = data.get("codeProduit") or data.get("code_produit")  # accepte les deux variantes
+        code = data.get("codeProduit") or data.get("code_produit")
         date = data.get("date")
         heure = data.get("heure")
 
-        # Vérification des champs
         if not code or not date or not heure:
             return jsonify({"erreur": "Champs codeProduit, date ou heure manquants"}), 400
 
-        # Concaténation pour créer dateHeure
+        # Concaténation date + heure
         date_heure = f"{date} {heure}"
-
-        # Génération du nom de fichier
         nom_fichier = f"{code}_{date_heure.replace(':', '').replace('-', '').replace(' ', '_')}.json"
         chemin = os.path.join("json_sorties", nom_fichier)
 
-        # Sauvegarde du fichier
+        # Écriture du fichier JSON
         with open(chemin, "w") as f:
             json.dump(data, f, indent=2)
 
@@ -37,7 +34,7 @@ def enregistrer_sortie():
         return jsonify({"erreur": str(e)}), 500
 
 
-# ✅ === Nouvelle route pour lister les fichiers JSON ===
+# ✅ Route pour lister tous les fichiers JSON disponibles
 @app.route("/list_json")
 def liste_fichiers_json():
     try:
@@ -48,13 +45,17 @@ def liste_fichiers_json():
     except Exception as e:
         return jsonify({"erreur": str(e)})
 
-from flask import send_from_directory
 
+# ✅ Route pour télécharger un fichier JSON en ligne
 @app.route("/fichiers/<nom_fichier>")
 def fichiers_json(nom_fichier):
-    chemin_dossier = os.path.join(os.getcwd(), "json_sorties")
-    return send_from_directory(chemin_dossier, nom_fichier)
+    try:
+        chemin_dossier = os.path.join(os.getcwd(), "json_sorties")
+        return send_from_directory(chemin_dossier, nom_fichier)
+    except Exception as e:
+        return jsonify({"erreur": str(e)}), 500
 
-# === Lancer en local si besoin ===
+
+# === Exécution locale (facultatif) ===
 if __name__ == "__main__":
     app.run(debug=True, port=5001)
