@@ -31,14 +31,15 @@ def enregistrer_sortie():
     except Exception as e:
         return jsonify({"erreur": str(e)}), 500
     
-    @app.route("/list_json", methods=["GET"])
-def lister_fichiers_json():
-    try:
-        fichiers = os.listdir("json_sorties")
-        fichiers_json = [f for f in fichiers if f.endswith(".json")]
-        return jsonify(fichiers_json)
-    except Exception as e:
-        return jsonify({"erreur": str(e)}), 500
+
+@app.route("/list_json", methods=["GET"])
+    def lister_fichiers_json():
+        try:
+            fichiers = os.listdir("json_sorties")
+            fichiers_json = [f for f in fichiers if f.endswith(".json")]
+            return jsonify(fichiers_json)
+        except Exception as e:
+            return jsonify({"erreur": str(e)}), 500
 
 # === AJOUT ESSENTIEL POUR RENDER ===
 if __name__ == "__main__":
